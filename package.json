@@ -1,0 +1,48 @@
+{
+  "name": "nodejs-pro-hoidanit",
+  "version": "1.0.0",
+  "main": "dist/app.js",
+  "scripts": {
+    "start": "nodemon",
+    "dev": "nodemon",
+    "build:css": "npx tailwindcss -i ./src/css/input.css -o ./public/css/output.css --watch",
+    "start:debug": "nodemon --watch src --ext ts,tsx --exec \"node --inspect-brk=9229 -r ts-node/register -r tsconfig-paths/register ./src/app.ts\""
+  },
+  "nodemonConfig": {
+    "watch": [
+      "src"
+    ],
+    "ext": "ts",
+    "ignore": [
+      "node_modules"
+    ],
+    "exec": "ts-node -r tsconfig-paths/register ./src/app.ts"
+  },
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "dependencies": {
+    "@google/generative-ai": "^0.24.1",
+    "@prisma/client": "6.3.0",
+    "dotenv": "16.4.7",
+    "ejs": "^3.1.10",
+    "express": "5.0.1",
+    "mysql2": "3.12.0",
+    "postcss-cli": "^11.0.1",
+    "pug": "^3.0.3"
+  },
+  "devDependencies": {
+    "@tailwindcss/cli": "^4.1.16",
+    "@types/express": "5.0.0",
+    "@types/node": "22.10.7",
+    "autoprefixer": "^10.4.21",
+    "nodemon": "^3.1.9",
+    "postcss": "^8.5.6",
+    "prisma": "6.3.0",
+    "tailwindcss": "^3.4.15",
+    "ts-node": "10.9.2",
+    "tsconfig-paths": "4.2.0",
+    "tsx": "^4.20.6",
+    "typescript": "^5.7.3"
+  }
+}

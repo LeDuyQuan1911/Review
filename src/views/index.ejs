@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title><%= name %></title>
+    <script src="https://cdn.tailwindcss.com"></script>
+  </head>
+  <body class="bg-gray-100 min-h-screen flex flex-col items-center py-10">
+    <!-- Nút chuyển trang -->
+    <div class="mb-8 text-center">
+      <a href="/login-user">
+        <button
+          class="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-6 rounded-lg shadow transition-all"
+        >
+          Chuyển sang trang đăng nhập
+        </button>
+      </a>
+      <h3 class="text-gray-700 mt-3">
+        Click vào đây để chuyển sang trang đăng nhập
+      </h3>
+    </div>
+
+    <!-- Danh sách Users -->
+    <div class="bg-white shadow-lg rounded-xl p-8 w-11/12 max-w-5xl">
+      <h3 class="text-2xl font-bold text-gray-800 mb-6 text-center">
+        📋 Danh Sách Người Dùng
+      </h3>
+      <table
+        class="min-w-full border border-gray-200 rounded-lg overflow-hidden"
+      >
+        <thead class="bg-blue-600 text-white">
+          <tr>
+            <th class="py-3 px-4 text-left">ID</th>
+            <th class="py-3 px-4 text-left">Username</th>
+            <th class="py-3 px-4 text-left">Email</th>
+            <th class="py-3 px-4 text-left">Address</th>
+            <th class="py-3 px-4 text-center">Action</th>
+          </tr>
+        </thead>
+        <tbody class="divide-y divide-gray-200" id="userTableBody">
+          <!-- <h3><%= JSON.stringify(data)%></h3> -->
+          <% for (let i = 0; i < data.length; i++) { %>
+          <tr class="hover:bg-gray-50 transition">
+            <td class="py-3 px-4 text-gray-900"><%= data[i].id %></td>
+            <td class="py-3 px-4 text-gray-900"><%= data[i].name %></td>
+            <td class="py-3 px-4 text-gray-900"><%= data[i].email %></td>
+            <td class="py-3 px-4 text-gray-900"><%= data[i].address %></td>
+            <td class="py-3 px-4 text-center">
+              <div class="flex gap-3">
+                <form action="/detail-user/<%= data[i].id %>" method="get">
+                  <button
+                    class="bg-green-500 hover:bg-green-600 text-white font-semibold py-1 px-4 rounded-lg shadow transition-all"
+                  >
+                    View
+                  </button>
+                </form>
+                <form action="/delete-user/<%= data[i].id %>" method="post">
+                  <button
+                    class="bg-red-500 hover:bg-red-600 text-white font-semibold py-1 px-4 rounded-lg shadow transition-all"
+                  >
+                    Xoá
+                  </button>
+                </form>
+              </div>
+            </td>
+          </tr>
+          <% } %>
+        </tbody>
+      </table>
+    </div>
+
+    <script>
+      // Hàm xoá dòng (client side)
+      function deleteRow(button) {
+        const row = button.closest("tr");
+        row.remove();
+      }
+    </script>
+  </body>
+</html>
