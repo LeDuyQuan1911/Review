@@ -1,14 +1,14 @@
 import getConnection from "../config/database";
-import mysql from "mysql2/promise";
+import { PrismaClient, Prisma } from "@prisma/client";
+const prisma = new PrismaClient();
 
 const handleCreateUser = (username: string, age: number) => {
   console.log(username, age);
 };
 
 const getAllUsers = async () => {
-  const connection = await getConnection();
   try {
-    const [results] = await connection.query("SELECT * FROM `users` ");
+    const results = await prisma.user.findMany();
     return results;
   } catch (err) {
     console.log(err);
@@ -17,11 +17,13 @@ const getAllUsers = async () => {
 };
 
 const createUser = async (name, email, address) => {
-  const connection = await getConnection();
   try {
-    const sql =
-      "INSERT INTO `users` (`name`, `email`, `address`) VALUES (?, ?, ?)";
-    const [result] = await connection.execute(sql, [name, email, address]);
+    const data = {
+      name: name,
+      email: email,
+      address: address,
+    };
+    const result = await prisma.user.create({ data: data });
     return result;
   } catch (err) {
     console.error("❌ Error inserting user:", err);
@@ -30,10 +32,13 @@ const createUser = async (name, email, address) => {
 };
 
 const deleteUser = async (id) => {
-  const connection = await getConnection();
   try {
-    const sql = "DELETE FROM users WHERE id= ?";
-    const [result] = await connection.query(sql, [id]);
+    const result = prisma.user.delete({
+      where: {
+        id: parseInt(id),
+      },
+    });
+
     return result;
   } catch (error) {
     console.error("Lỗi khi xóa user:", error);
@@ -42,13 +47,26 @@ const deleteUser = async (id) => {
 };
 
 const detailUserService = async (id) => {
-  const connection = await getConnection();
   try {
-    const sql = "SELECT * FROM users WHERE id= ?";
-    const [result] = await connection.query(sql, [id]);
+    const result = await prisma.user.findUnique({
+      where: { id: parseInt(id) },
+    });
     return result;
   } catch (error) {
-    console.error("Lỗi khi xem chi tiet user:", error);
+    console.error("❌ Lỗi khi xem chi tiết user:", error);
+    throw error;
+  }
+};
+
+const updatelUserService = async (id, name, email, address) => {
+  try {
+    const result = await prisma.user.update({
+      where: { id: parseInt(id) },
+      data: { name, email, address },
+    });
+    return result;
+  } catch (error) {
+    console.error("❌ Lỗi khi xem chi tiết user:", error);
     throw error;
   }
 };
@@ -59,4 +77,5 @@ export {
   createUser,
   deleteUser,
   detailUserService,
+  updatelUserService,
 };
