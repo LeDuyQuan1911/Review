@@ -16,12 +16,14 @@ const getAllUsers = async () => {
   }
 };
 
-const createUser = async (name, email, address) => {
+const createUser = async (fullname, username, address) => {
   try {
     const data = {
-      name: name,
-      email: email,
+      fullname: fullname,
+      username: username,
       address: address,
+      password: "",
+      accountType: "",
     };
     const result = await prisma.user.create({ data: data });
     return result;
@@ -62,7 +64,13 @@ const updatelUserService = async (id, name, email, address) => {
   try {
     const result = await prisma.user.update({
       where: { id: parseInt(id) },
-      data: { name, email, address },
+      data: {
+        fullName: name,
+        username: email,
+        address,
+        password: "",
+        accountType: "",
+      },
     });
     return result;
   } catch (error) {
