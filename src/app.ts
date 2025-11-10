@@ -21,7 +21,7 @@ app.use(express.urlencoded({ extended: true }));
 webRoutes(app);
 
 //seeding data
-initDatabase();
+// initDatabase();
 
 app.listen(port, () => {
   console.log(`Example app listening at http://localhost:${port}`);
