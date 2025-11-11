@@ -16,6 +16,16 @@ const getAllUsers = async () => {
   }
 };
 
+const getAllRoles = async () => {
+  try {
+    const roles = await prisma.role.findMany();
+    return roles;
+  } catch (err) {
+    console.log(err);
+    return [];
+  }
+};
+
 const createUser = async (fullname, username, address) => {
   try {
     const data = {
@@ -86,4 +96,5 @@ export {
   deleteUser,
   detailUserService,
   updatelUserService,
+  getAllRoles,
 };
