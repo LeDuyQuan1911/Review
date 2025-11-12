@@ -1,9 +1,13 @@
+import { ACCOUNT_TYPE } from "config/constant";
 import getConnection from "../config/database";
 import { PrismaClient, Prisma } from "@prisma/client";
 const prisma = new PrismaClient();
 
-const handleCreateUser = (username: string, age: number) => {
-  console.log(username, age);
+import bcrypt from "bcrypt";
+const saltRounds = 10;
+
+const hashPassword = async (plainText: string) => {
+  return await bcrypt.hash(plainText, saltRounds);
 };
 
 const getAllUsers = async () => {
@@ -26,16 +30,27 @@ const getAllRoles = async () => {
   }
 };
 
-const createUser = async (fullname, username, address) => {
+const createUser = async (
+  fullname: string,
+  username: string,
+  address: string,
+  phone: string,
+  avatar: string,
+  role: string
+) => {
+  const defaultPassword = await hashPassword("123456");
   try {
     const data = {
       fullname: fullname,
       username: username,
       address: address,
-      password: "",
-      accountType: "",
+      password: defaultPassword,
+      accountType: ACCOUNT_TYPE.SYSTEM,
+      avatar: avatar,
+      phone: phone,
+      roleId: +role,
     };
-    const result = await prisma.user.create({ data: data });
+    const result = await prisma.user.create({ data });
     return result;
   } catch (err) {
     console.error("❌ Error inserting user:", err);
@@ -44,6 +59,21 @@ const createUser = async (fullname, username, address) => {
 };
 
 const deleteUser = async (id) => {
+  try {
+    const result = prisma.user.delete({
+      where: {
+        id: parseInt(id),
+      },
+    });
+
+    return result;
+  } catch (error) {
+    console.error("Lỗi khi xóa user:", error);
+    throw error;
+  }
+};
+
+const deleteAdminUser = async (id) => {
   try {
     const result = prisma.user.delete({
       where: {
@@ -70,31 +100,38 @@ const detailUserService = async (id) => {
   }
 };
 
-const updatelUserService = async (id, name, email, address) => {
-  try {
-    const result = await prisma.user.update({
-      where: { id: parseInt(id) },
-      data: {
-        fullName: name,
-        username: email,
-        address,
-        password: "",
-        accountType: "",
-      },
-    });
-    return result;
-  } catch (error) {
-    console.error("❌ Lỗi khi xem chi tiết user:", error);
-    throw error;
-  }
-};
+// const updatelUserService = async (  fullname: string,
+//   username: string,
+//   address: string,
+//   phone: string,
+//   avatar: string) => {
+//   try {
+//     const result = await prisma.user.update({
+//       where: { id: parseInt(id) },
+//      data = {
+//       fullname: fullname,
+//       username: username,
+//       address: address,
+//       password: "123456 ",
+//       accountType: ACCOUNT_TYPE.SYSTEM,
+//       avatar: avatar,
+//       phone: phone,
+//     };
+//     });
+//     return result;
+//   } catch (error) {
+//     console.error("❌ Lỗi khi xem chi tiết user:", error);
+//     throw error;
+//   }
+// };
 
 export {
-  handleCreateUser,
   getAllUsers,
   createUser,
   deleteUser,
   detailUserService,
-  updatelUserService,
+  // updatelUserService,
   getAllRoles,
+  hashPassword,
+  deleteAdminUser,
 };

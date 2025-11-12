@@ -2,15 +2,13 @@ import { Request, Response } from "express";
 import {
   createUser,
   getAllUsers,
-  handleCreateUser,
   deleteUser,
   detailUserService,
-  updatelUserService,
+  // updatelUserService,
 } from "../services/user.service";
 
 const getHomePage = async (req: Request, res: Response) => {
   const data = await getAllUsers();
-  console.log(data);
   res.render("listUser.ejs", {
     name: "User",
     data: data,
@@ -23,7 +21,7 @@ const getLoginPage = (req: Request, res: Response) => {
 
 const loginUser = async (req: Request, res: Response) => {
   const { name, email, address } = req.body;
-  await createUser(name, email, address);
+  // await createUser(name, email, address);
   res.redirect("/");
 };
 
@@ -42,11 +40,11 @@ const detailUserController = async (req: Request, res: Response) => {
   });
 };
 
-const updateUserController = async (req: Request, res: Response) => {
-  const { id, name, email, address } = req.body;
-  const data = await updatelUserService(id, name, email, address);
-  res.redirect("/");
-};
+// const updateUserController = async (req: Request, res: Response) => {
+//   const { id, name, email, address } = req.body;
+//   const data = await updatelUserService(id, name, email, address);
+//   res.redirect("/");
+// };
 
 export {
   getHomePage,
@@ -54,5 +52,5 @@ export {
   loginUser,
   deleteUserController,
   detailUserController,
-  updateUserController,
+  // updateUserController,
 };

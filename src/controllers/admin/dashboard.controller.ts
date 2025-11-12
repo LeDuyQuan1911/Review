@@ -1,5 +1,12 @@
 import { Request, Response } from "express";
-import { getAllRoles, getAllUsers } from "services/user.service";
+import { stringify } from "querystring";
+import {
+  createUser,
+  deleteAdminUser,
+  deleteUser,
+  getAllRoles,
+  getAllUsers,
+} from "services/user.service";
 
 const getDashboardPage = async (req: Request, res: Response) => {
   res.render("admin/dashboard/show.ejs");
@@ -30,8 +37,16 @@ const getAdminProductPage = async (req: Request, res: Response) => {
 
 const postAdminCreateUser = async (req: Request, res: Response) => {
   const { fullname, username, phone, role, address } = req.body;
-  console.log(fullname, username, phone, role, address);
-  res.render("admin/dashboard/show.ejs");
+  const file = req.file;
+  const avatar = file?.filename ?? null;
+  await createUser(fullname, username, address, phone, avatar, role);
+  res.redirect("/admin/user");
+};
+
+const postAdminDeleteUser = async (req: Request, res: Response) => {
+  const id = req.params; //25
+  await deleteAdminUser(id.id);
+  res.redirect("/admin/user");
 };
 
 export {
@@ -41,4 +56,5 @@ export {
   getAdminProductPage,
   getAdminCreateUserPage,
   postAdminCreateUser,
+  postAdminDeleteUser,
 };

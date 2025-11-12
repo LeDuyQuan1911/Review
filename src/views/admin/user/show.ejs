@@ -67,13 +67,13 @@
                   <% for (let i = 0; i < data.length; i++) { %>
                   <tr>
                     <td><%= data[i].id %></td>
-                    <td><%= data[i].name %></td>
-                    <td><%= data[i].email %></td>
+                    <td><%= data[i].fullname %></td>
+                    <td><%= data[i].username %></td>
                     <td><%= data[i].address %></td>
                     <td class="text-center">
                       <div class="d-flex justify-content-center gap-2">
                         <form
-                          action="/detail-user/<%= data[i].id %>"
+                          action="admin/detail-user/<%= data[i].id %>"
                           method="get"
                         >
                           <button
@@ -84,7 +84,7 @@
                           </button>
                         </form>
                         <form
-                          action="/delete-user/<%= data[i].id %>"
+                          action="/admin/deleteUser/<%= data[i].id %>"
                           method="post"
                         >
                           <button

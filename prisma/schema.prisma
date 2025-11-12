@@ -18,11 +18,14 @@ model User {
   id          Int       @id @default(autoincrement())
   username    String    @db.VarChar(255)
   password    String    @db.VarChar(255)
-  fullName    String?   @db.VarChar(255)
+  fullname    String?   @db.VarChar(255)
   address     String?   @db.VarChar(255)
   phone       String?   @db.VarChar(255)
   accountType String?   @db.VarChar(50)
   avatar      String?   @db.VarChar(255)
+
+  role Role @relation(fields: [roleId], references: [id])
+  roleId Int
 }
 
 model Role {
@@ -30,6 +33,8 @@ model Role {
   id            Int       @id @default(autoincrement())
   name          String    @db.VarChar(100)
   description   String    @db.VarChar(255)
+
+  users User[]
 }
 
 model Order {
