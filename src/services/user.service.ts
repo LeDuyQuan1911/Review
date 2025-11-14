@@ -100,30 +100,44 @@ const detailUserService = async (id) => {
   }
 };
 
-// const updatelUserService = async (  fullname: string,
-//   username: string,
-//   address: string,
-//   phone: string,
-//   avatar: string) => {
-//   try {
-//     const result = await prisma.user.update({
-//       where: { id: parseInt(id) },
-//      data = {
-//       fullname: fullname,
-//       username: username,
-//       address: address,
-//       password: "123456 ",
-//       accountType: ACCOUNT_TYPE.SYSTEM,
-//       avatar: avatar,
-//       phone: phone,
-//     };
-//     });
-//     return result;
-//   } catch (error) {
-//     console.error("❌ Lỗi khi xem chi tiết user:", error);
-//     throw error;
-//   }
-// };
+const detailAdminUserService = async (id) => {
+  try {
+    const result = await prisma.user.findUnique({
+      where: { id: parseInt(id) },
+    });
+    return result;
+  } catch (error) {
+    console.error("❌ Lỗi khi xem chi tiết user:", error);
+    throw error;
+  }
+};
+
+const updatelUserService = async (
+  id: string,
+  fullname: string,
+  username: string,
+  address: string,
+  phone: string,
+  avatar: string,
+  role: string
+) => {
+  try {
+    const result = await prisma.user.update({
+      where: { id: +id },
+      data: {
+        fullname: fullname,
+        address: address,
+        phone: phone,
+        ...(avatar && { avatar: avatar }),
+        roleId: +role,
+      },
+    });
+    return result;
+  } catch (error) {
+    console.error("❌ Lỗi khi xem chi tiết user:", error);
+    throw error;
+  }
+};
 
 export {
   getAllUsers,
@@ -134,4 +148,6 @@ export {
   getAllRoles,
   hashPassword,
   deleteAdminUser,
+  detailAdminUserService,
+  updatelUserService,
 };

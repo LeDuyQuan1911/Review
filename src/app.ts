@@ -5,6 +5,7 @@ import initDatabase from "config/seed";
 import getConnection from "./config/database";
 import { webRoutes } from "./routes/web";
 import path = require("path");
+import { z } from "zod";
 
 //config view engine
 app.set("view engine", "ejs");

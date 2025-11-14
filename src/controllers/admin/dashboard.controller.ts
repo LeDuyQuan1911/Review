@@ -4,8 +4,10 @@ import {
   createUser,
   deleteAdminUser,
   deleteUser,
+  detailAdminUserService,
   getAllRoles,
   getAllUsers,
+  updatelUserService,
 } from "services/user.service";
 
 const getDashboardPage = async (req: Request, res: Response) => {
@@ -49,6 +51,24 @@ const postAdminDeleteUser = async (req: Request, res: Response) => {
   res.redirect("/admin/user");
 };
 
+const getAdminDetailUser = async (req: Request, res: Response) => {
+  const user = req.params;
+  const data = await detailAdminUserService(user.id);
+  const roles = await getAllRoles();
+  res.render("admin/user/detailUser.ejs", {
+    data: data,
+    roles,
+  });
+};
+
+const postAdminUpdateUser = async (req: Request, res: Response) => {
+  const { id, fullname, username, address, phone, role } = req.body;
+  const file = req.file;
+  const avatar = file?.filename ?? null;
+  await updatelUserService(id, fullname, username, address, phone, avatar, role);
+  res.redirect("/admin/user");
+};
+
 export {
   getDashboardPage,
   getAdminUserPage,
@@ -57,4 +77,6 @@ export {
   getAdminCreateUserPage,
   postAdminCreateUser,
   postAdminDeleteUser,
+  getAdminDetailUser,
+  postAdminUpdateUser,
 };

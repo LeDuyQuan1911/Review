@@ -8,11 +8,7 @@ import {
 } from "../services/user.service";
 
 const getHomePage = async (req: Request, res: Response) => {
-  const data = await getAllUsers();
-  res.render("listUser.ejs", {
-    name: "User",
-    data: data,
-  });
+  res.render("client/home/show.ejs");
 };
 
 const getLoginPage = (req: Request, res: Response) => {
